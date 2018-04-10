@@ -18,5 +18,7 @@ cv2.imshow('maskInv',result)
 # roi = dog[0:rows, 0:cols ]
 # result=cv2.addWeighted(cat, 0.2, roi, 0.8, 0)
 # cv2.imshow('win', result)
+#performance measure
+#python scalar operate are fast than np, opencv function are fast than np
 cv2.waitKey(0)
 cv2.destroyAllWindows()
