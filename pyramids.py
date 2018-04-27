@@ -18,6 +18,9 @@ from matplotlib import pyplot as plt
 A = cv2.imread('apple.png')
 B = cv2.imread('orange.png')
 
+A=cv2.resize(A,(256,256))
+B=cv2.resize(B,(256,256))
+
 # generate Gaussian pyramid for A
 G = A.copy()
 gpA = [G]
@@ -31,3 +34,37 @@ gpB = [G]
 for i in xrange(6):
     G = cv2.pyrDown(G)
     gpB.append(G)
+
+# generate laplacian pyramid for A
+lpa = [gpA[5]]
+for i in xrange(5,0,-1):
+    GE = cv2.pyrUp(gpA[i])
+    print gpA[i-1].shape, GE.shape
+    L = cv2.subtract(gpA[i-1], GE)
+    lpa.append(L)
+
+# generate laplacian pyramid for B
+lpb = [gpB[5]]
+for i in xrange(5,0,-1):
+    GE = cv2.pyrUp(gpB[i])
+    L = cv2.subtract(gpB[i-1], GE)
+    lpb.append(L)
+
+L=[]
+i=0
+for a,b in zip(lpa, lpb):
+    rows,cols,dpt=a.shape
+    ls=np.hstack((a[:,0:cols/2],b[:,cols/2:]))
+    i+=1
+    cv2.imwrite(str(i)+".jpg",ls)
+    L.append(ls)
+# now reconstruct
+ls_ = L[0]
+for i in xrange(1,6):
+    ls_ = cv2.pyrUp(ls_)
+    ls_ = cv2.add(ls_, L[i])
+# image with direct connecting each half
+real = np.hstack((A[:,:cols/2],B[:,cols/2:]))
+
+# cv2.imwrite('1.jpg',ls_)
+# cv2.imwrite('2.jpg',real)
