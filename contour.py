@@ -35,6 +35,40 @@ rect = cv2.minAreaRect(cnt)
 box = cv2.boxPoints(rect)
 box = np.int0(box)
 print box
+
+#计算点到轮廓的距离,当点在轮廓外部时返回负数，内部时返回正数，最后一个参数是否计算距离，false时只检测相对位置 返回 +1 -1 0
+dist = cv2.pointPolygonTest(cnt,(50,50),True)
+#计算轮廓的相似度，值越小越相似 cv2.matchShapes
+ret = cv2.matchShapes(cnt,cnt,1,0.0)
+
+#计算宽长比
+aspect_ratio = float(w)/h
+#计算extent
+rect_area = w * h
+extent = float(area) / rect_area
+#计算solidity
+hull_area = cv2.contourArea(hull)
+solidity=float(area)/hull_area
+#计算当量直径 Equivalent Diameter 面积等于已知轮廓面积圆的半径
+equi_diameter = np.sqrt(4*area/np.pi)
+# 计算轮廓方向 
+(x,y),(MA,ma),angle = cv2.fitEllipse(cnt)
+#获取mask
+mask = np.zeros(imgray.shape,np.uint8)
+cv2.drawContours(mask,[cnt],0,255,-1)
+pixelpoints = np.transpose(np.nonzero(mask))
+#pixelpoints = cv2.findNonZero(mask)
+# print "mask-->", pixelpoints
+#获取最大值最小值及他们的位置
+min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(imgray,mask = mask)
+#获取平均色值
+mean_val = cv2.mean(im,mask = mask)
+#获取边界点
+leftmost = tuple(cnt[cnt[:,:,0].argmin()][0])
+rightmost = tuple(cnt[cnt[:,:,0].argmax()][0])
+topmost = tuple(cnt[cnt[:,:,1].argmin()][0])
+bottommost = tuple(cnt[cnt[:,:,1].argmax()][0])
+
 img = cv2.drawContours(img,[box],0,(0,0,255),1)
 print img.shape
 
@@ -53,7 +87,7 @@ rows,cols = img.shape[:2]
 [vx,vy,x,y] = cv2.fitLine(cnt, cv2.DIST_L2,0,0.01,0.01)
 lefty = int((-x*vy/vx) + y)
 righty = int(((cols-x)*vy/vx)+y)
-img = cv2.line(img,(cols-1,righty),(0,lefty),(0,255,0),2)
+# img = cv2.line(img,(cols-1,righty),(0,lefty),(0,255,0),2)
 
 cv2.imshow("win", img)
 cv2.waitKey(0)
