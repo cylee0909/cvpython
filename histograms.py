@@ -57,7 +57,7 @@ cdf = hist.cumsum() #计算累加值
 equ = cv2.equalizeHist(img)
 res = np.hstack((img,equ))
 
-#
+#限制对比度自适应直方图均衡化
 # create a CLAHE object (Arguments are optional).
 clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
 cl1 = clahe.apply(img)

@@ -8,7 +8,12 @@ imgray=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 #二值化
 ret,thresh=cv2.threshold(imgray,127,255,0)
 #查找所有轮廓，查找轮廓需要在二值化图像中进行，从黑色背景中找出白色元素的轮廓
+# Contour Retrieval Mode  cv2.RETR_LIST, cv2.RETR_TREE, cv2.RETR_CCOMP, cv2.RETR_EXTERNAL
 _,contours,hierarchy=cv2.findContours(thresh,1,2)
+# 其中 RETR_LIST 代表轮廓间无层级关系 RETR_EXTERNAL 只返回外部轮廓，内部轮廓被忽略 
+# RETR_CCOMP 这个会将轮廓分为两级 最外层的轮廓为h1 其子轮廓为h2 h2的子轮廓为h1
+# RETR_TREE 树形结构
+
 #轮廓相关参数
 cnt = contours[0]
 #计算轮廓的矩
@@ -38,8 +43,9 @@ print box
 
 #计算点到轮廓的距离,当点在轮廓外部时返回负数，内部时返回正数，最后一个参数是否计算距离，false时只检测相对位置 返回 +1 -1 0
 dist = cv2.pointPolygonTest(cnt,(50,50),True)
-#计算轮廓的相似度，值越小越相似 cv2.matchShapes
+#计算轮廓的相似度，值越小越相似 cv2.matchShapes,算法基于hu-moment, 这些矩具有位移旋转缩放不变的性质
 ret = cv2.matchShapes(cnt,cnt,1,0.0)
+
 
 #计算宽长比
 aspect_ratio = float(w)/h

@@ -6,6 +6,9 @@ from matplotlib import pyplot as plt
 
 #傅立叶变换将图像从空间域变换到频率域
 
+#性能问题，如果图像的尺寸是2 、3、5的级数则计算效率会比较高，使用cv2.getOptimalDFTSize()可以获取优化size
+
+
 # #fft in numpy
 # img = cv2.imread('dog.jpg',0) #get the gray image
 # f = np.fft.fft2(img) # fft 变换
