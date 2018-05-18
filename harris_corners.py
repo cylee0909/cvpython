@@ -9,6 +9,12 @@ gray=cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 gray = np.float32(gray)
 
 imgs.append(gray)
+
+# img - Input image, it should be grayscale and float32 type.
+# blockSize - It is the size of neighbourhood considered for corner detection
+# ksize - Aperture parameter of Sobel derivative used.
+# k - Harris detector free parameter in the equation.
+
 harris = cv2.cornerHarris(gray,2,3,0.04)
 imgs.append(harris)
 #result is dilated for marking the corners, not important
