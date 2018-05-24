@@ -36,7 +36,7 @@ accuracy = correct*100.0/result.size
 print accuracy
 
 ## save the data
-np.savez('knn_data.npz',train=train, train_labels=train_labels)
+# np.savez('knn_data.npz',train=train, train_labels=train_labels)
 
 # 对于训练数据，我们可以直接存储在文件中，下次识别的时候直接读取分类数据进行分类即可
 # Now load the data
