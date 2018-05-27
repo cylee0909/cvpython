@@ -1,6 +1,8 @@
 #encoding:utf-8
 import cv2
 import numpy as np
+from matplotlib import pyplot as plt
+
 #图像轮廓
 img=cv2.imread('cat.jpg')
 #灰度化
@@ -68,7 +70,7 @@ pixelpoints = np.transpose(np.nonzero(mask))
 #获取最大值最小值及他们的位置
 min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(imgray,mask = mask)
 #获取平均色值
-mean_val = cv2.mean(im,mask = mask)
+mean_val = cv2.mean(imgray,mask = mask)
 #获取边界点
 leftmost = tuple(cnt[cnt[:,:,0].argmin()][0])
 rightmost = tuple(cnt[cnt[:,:,0].argmax()][0])
@@ -95,6 +97,5 @@ lefty = int((-x*vy/vx) + y)
 righty = int(((cols-x)*vy/vx)+y)
 # img = cv2.line(img,(cols-1,righty),(0,lefty),(0,255,0),2)
 
-cv2.imshow("win", img)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+plt.imshow(img, 'gray')
+plt.show()
